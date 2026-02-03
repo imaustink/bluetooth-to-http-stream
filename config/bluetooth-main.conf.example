@@ -1,0 +1,55 @@
+# Bluetooth Main Configuration for Audio Sink (A2DP Receiver)
+# Copy this file to /etc/bluetooth/main.conf on your Raspberry Pi
+#
+# CRITICAL: The Pi must advertise as a Bluetooth Audio SINK (receiver)
+# This allows devices like turntables to connect TO the Pi and stream audio
+#
+# Usage:
+#   sudo cp bluetooth-main.conf.example /etc/bluetooth/main.conf
+#   sudo systemctl restart bluetooth
+#   sudo hciconfig hci0 class 0x200414  # May be required to force the class
+#   bluetoothctl show | grep Class      # Verify: should show 0x00200414
+
+[General]
+
+# Device name that appears when scanning for Bluetooth devices
+Name = airvinyl
+
+# Bluetooth Device Class - CRITICAL FOR A2DP AUDIO SINK
+# 0x200414 = Audio Sink/Receiver (allows devices to stream audio TO the Pi)
+# - 0x20 = Audio/Video (major class)
+# - 0x04 = Audio (minor class)  
+# - 0x14 = Rendering | Capturing (service class)
+#
+# NOTE: BlueZ may not always apply this correctly from config file.
+# If "bluetoothctl show | grep Class" shows 0x00000414 instead of 0x00200414,
+# you MUST manually set it with: sudo hciconfig hci0 class 0x200414
+# See README.md Step 4 for persistence options.
+Class = 0x200414
+
+# Always discoverable (allows devices to find the Pi at any time)
+DiscoverableTimeout = 0
+Discoverable = yes
+
+# Always pairable (allows new devices to pair)
+PairableTimeout = 0
+Pairable = yes
+
+# Privacy settings - not needed for audio sink
+# Privacy = off
+
+# Fast connectable mode - reduces connection time
+FastConnectable = true
+
+# Enable SDP server (required for A2DP profile)
+# This is usually enabled by default
+# Class = 0x200414 advertises audio capabilities via SDP
+
+[Policy]
+# Auto-enable controllers (Bluetooth adapters) on boot
+AutoEnable = true
+
+# Reconnect to previously paired devices (experimental)
+# Uncomment to enable automatic reconnection
+# ReconnectAttempts = 7
+# ReconnectIntervals = 1, 2, 4, 8, 16, 32, 64

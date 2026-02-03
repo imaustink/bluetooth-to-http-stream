@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">Turntable Audio Stream (%h)</name>
+  <service>
+    <type>_http._tcp</type>
+    <port>80</port>
+    <txt-record>path=/stream</txt-record>
+    <txt-record>description=AT-TT Turntable Bluetooth Audio Stream</txt-record>
+  </service>
+  <service>
+    <type>_icecast._tcp</type>
+    <port>80</port>
+    <txt-record>path=/stream</txt-record>
+    <txt-record>description=AT-TT Turntable Bluetooth Audio Stream</txt-record>
+  </service>
+</service-group>
